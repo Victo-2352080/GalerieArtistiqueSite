@@ -1,0 +1,9 @@
+{
+    "navigationFallback": {
+        "rewrite": "/index.html",
+        "exclude": [
+            "/dist/*.{svg,png,jpg,gif}",
+            "/dist/assets/*"
+        ]
+    }
+}

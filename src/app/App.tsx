@@ -1,41 +1,55 @@
-import { useContext } from 'react';
-import { Box } from '@mui/material';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Outlet,
+  Navigate,
+} from 'react-router-dom';
 
-import Galerie from '../components/Galerie.component';
 import Navbar from '../components/NavBar.component';
-import FavorisListe from '../components/FavorisListe.component';
-
-import { FavorisContext } from '../Contexts/favoris.context';
 import Accueil from '../components/Accueil.component';
+import Galerie from '../components/Galerie.component';
+import FavorisListe from '../components/FavorisListe.component';
+import AjouterOeuvre from '../components/AjouterOeuvre.component';
+import Login from '../components/Login.component';
 import Footer from '../components/Footer.component';
 
-function App() {
-  const { favorisOuvert } = useContext(FavorisContext);
-
+function Modele() {
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        minHeight: '100vh',
-        bgcolor: '#fafafa',
-        width: '100%',
-      }}
-    >
+    <div>
       <Navbar />
-      <Box sx={{ width: '100vw', overflowX: 'hidden' }}>
-        {favorisOuvert ? (
-          <>
-            <FavorisListe />
-          </>
-        ) : (
-          <>
-            <Accueil />
-            <Galerie />
-          </>
-        )}
-        <Footer />
-      </Box>
-    </Box>
+      <Outlet />
+      <Footer />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Modele />}>
+          {/* Accueil */}
+          <Route
+            index
+            element={
+              <>
+                <Accueil />
+                <Galerie />
+              </>
+            }
+          />
+
+          {/* Pages */}
+          <Route path="favoris" element={<FavorisListe />} />
+          <Route path="ajouter" element={<AjouterOeuvre />} />
+          <Route path="connexion" element={<Login />} />
+
+          {/* Sécurité */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

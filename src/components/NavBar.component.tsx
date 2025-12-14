@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -6,14 +7,20 @@ import {
   IconButton,
   Badge,
   Box,
+  Button,
 } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { FavorisContext } from '../Contexts/favoris.context';
+import AddIcon from '@mui/icons-material/Add';
+import LoginIcon from '@mui/icons-material/Login';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { Palette } from '@mui/icons-material';
+import { FavorisContext } from '../Contexts/favorisContext';
+import { LoginContext } from '../Contexts/LoginContext';
 
 export default function Navbar() {
-  const { oeuvreFavoris, favorisOuvert, setFavorisOuvert } =
-    useContext(FavorisContext);
+  const { oeuvreFavoris } = useContext(FavorisContext);
+  const navigate = useNavigate();
+  const { isLoggedIn } = useContext(LoginContext);
 
   return (
     <AppBar
@@ -24,73 +31,156 @@ export default function Navbar() {
         left: 0,
         right: 0,
         margin: '0 auto',
-        maxWidth: '900px',
-
-        background: 'rgba(255, 255, 255, 0.10)',
-        backdropFilter: 'blur(10px) saturate(200%)',
+        maxWidth: { xs: '95%', sm: '900px' },
+        background: 'rgba(255, 255, 255, 0.15)',
+        backdropFilter: 'blur(20px) saturate(180%)',
         WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-
         borderRadius: 4,
-        padding: '4px',
+        padding: '6px',
         overflow: 'hidden',
-
-        border: '1px solid rgba(255,255,255,0.2)',
-        boxShadow: '0 12px 40px rgba(0,0,0,0.35)',
+        border: '1px solid rgba(255,255,255,0.3)',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+        transition: 'all 0.3s ease',
       }}
     >
       <Toolbar
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          minHeight: '64px',
-          position: 'relative',
-          zIndex: 2,
+          minHeight: { xs: '56px', sm: '64px' },
+          px: { xs: 1, sm: 2 },
         }}
       >
-        <Typography
-          variant="h5"
+        {/* Logo/Title */}
+        <Box
           sx={{
-            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.5,
             cursor: 'pointer',
-            padding: '0 8px',
-            borderRadius: 5,
-            color: 'black',
-            py: 1,
-            px: 1,
-            bgcolor: 'rgba(240,240,240,0.6)',
+            padding: '8px 16px',
+            borderRadius: 3,
+            bgcolor: 'rgba(255,255,255,0.9)',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              bgcolor: 'white',
+              transform: 'translateY(-2px)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            },
           }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => navigate('/')}
         >
-          Galerie Art
-        </Typography>
+          <Palette sx={{ color: '#667eea', fontSize: '1.8rem' }} />
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 800,
+              color: '#2d3748',
+              letterSpacing: '-0.5px',
+              display: { xs: 'none', sm: 'block' },
+            }}
+          >
+            Galerie Art
+          </Typography>
+        </Box>
 
-        {/* Icône favoris */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        {/* Action Buttons */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          {/* Favorites Button */}
           <IconButton
-            onClick={() => setFavorisOuvert(!favorisOuvert)}
+            onClick={() => navigate('/favoris')}
             sx={{
               color: '#ff4081',
-              bgcolor: 'rgba(240,240,240,0.5)',
+              bgcolor: 'rgba(255,255,255,0.9)',
               borderRadius: 3,
-              padding: 1.2,
-              transition: '0.25s',
+              padding: { xs: '10px', sm: '12px' },
+              transition: 'all 0.3s ease',
               '&:hover': {
-                bgcolor: 'rgba(220,220,220,0.5)',
+                bgcolor: 'white',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 12px rgba(255, 64, 129, 0.3)',
               },
             }}
           >
-            {favorisOuvert ? (
-              <ArrowBackIcon />
-            ) : (
-              <Badge
-                badgeContent={oeuvreFavoris.length}
-                color="info"
-                overlap="circular"
-              >
-                <FavoriteIcon />
-              </Badge>
-            )}
+            <Badge
+              badgeContent={oeuvreFavoris.length}
+              color="secondary"
+              overlap="circular"
+              sx={{
+                '& .MuiBadge-badge': {
+                  fontWeight: 700,
+                  fontSize: '0.7rem',
+                },
+              }}
+            >
+              <FavoriteIcon />
+            </Badge>
           </IconButton>
+
+          {/* Add Button */}
+          <IconButton
+            onClick={() => {
+              if (isLoggedIn) {
+                navigate('/ajouter');
+              } else {
+                navigate('/login');
+              }
+            }}
+            sx={{
+              color: '#667eea',
+              bgcolor: 'rgba(255,255,255,0.9)',
+              borderRadius: 3,
+              padding: { xs: '10px', sm: '12px' },
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                bgcolor: 'white',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+              },
+            }}
+            title={
+              isLoggedIn ? 'Ajouter une œuvre' : 'Connectez-vous pour ajouter'
+            }
+          >
+            <AddIcon />
+          </IconButton>
+
+          {/* Login Button */}
+          <Button
+            component={Link}
+            to="/login"
+            startIcon={
+              isLoggedIn ? (
+                <CheckCircleIcon sx={{ fontSize: '1.2rem' }} />
+              ) : (
+                <LoginIcon sx={{ fontSize: '1.2rem' }} />
+              )
+            }
+            sx={{
+              bgcolor: isLoggedIn
+                ? 'rgba(76, 175, 80, 0.9)'
+                : 'rgba(255,255,255,0.9)',
+              color: isLoggedIn ? 'white' : '#2d3748',
+              borderRadius: 3,
+              px: { xs: 2, sm: 3 },
+              py: 1,
+              fontWeight: 700,
+              fontSize: { xs: '0.8rem', sm: '0.9rem' },
+              textTransform: 'none',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                bgcolor: isLoggedIn ? 'rgba(76, 175, 80, 1)' : 'white',
+                transform: 'translateY(-2px)',
+                boxShadow: isLoggedIn
+                  ? '0 4px 12px rgba(76, 175, 80, 0.4)'
+                  : '0 4px 12px rgba(0,0,0,0.15)',
+              },
+            }}
+          >
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              {isLoggedIn ? 'Connecté' : 'Se connecter'}
+            </Box>
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>

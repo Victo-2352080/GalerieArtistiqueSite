@@ -1,9 +1,8 @@
 import { useContext } from 'react';
 import type { IOeuvre } from '../models/iOeuvre.model';
-import { FavorisContext } from '../Contexts/favoris.context';
+import { FavorisContext } from '../Contexts/favorisContext';
 import { Card, CardMedia, IconButton, Box, Chip } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 interface ICarteProps {
   oeuvre: IOeuvre;
@@ -38,7 +37,6 @@ export default function OeuvreCarte(props: ICarteProps) {
         boxShadow: 'none',
       }}
     >
-      {/* Bouton cœur */}
       <IconButton
         onClick={toggleFavoris}
         sx={{
@@ -50,7 +48,7 @@ export default function OeuvreCarte(props: ICarteProps) {
           color: props.dansfavoris ? '#ff4081' : 'white',
         }}
       >
-        {props.dansfavoris ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+        <FavoriteIcon />
       </IconButton>
 
       {/* Image */}
@@ -67,7 +65,6 @@ export default function OeuvreCarte(props: ICarteProps) {
         }}
       />
 
-      {/* Overlay tags en bas */}
       <Box
         sx={{
           position: 'absolute',

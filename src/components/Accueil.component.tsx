@@ -11,7 +11,7 @@ export default function Accueil() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'relative', // pour le contenu centré
+        position: 'relative',
       }}
     >
       <Box

@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import OeuvreCarte from './OeuvreCarte.component';
 import type { IOeuvre } from '../models/iOeuvre.model';
-import { FavorisContext } from '../Contexts/favoris.context';
+import { FavorisContext } from '../Contexts/favorisContext';
 import { Container, CircularProgress, Box } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 

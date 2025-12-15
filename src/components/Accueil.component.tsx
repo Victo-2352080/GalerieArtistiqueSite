@@ -16,6 +16,7 @@ export default function Accueil() {
         backgroundColor: '#fafafa',
       }}
     >
+      {/* Box pour le titre avec iridescence */}
       <Box
         sx={{
           width: '60vw',
@@ -25,7 +26,7 @@ export default function Accueil() {
           overflow: 'hidden',
         }}
       >
-        {/* Iridescence en fond */}
+        {/* Code emprunter de https://reactbits.dev/ */}
         <Iridescence
           color={[0.8, 0.8, 0.8]}
           mouseReact={false}
@@ -33,7 +34,7 @@ export default function Accueil() {
           speed={0.3}
         />
 
-        {/* Glass blanc semi-transparent */}
+        {/* Floue */}
         <Box
           sx={{
             position: 'absolute',
@@ -43,7 +44,7 @@ export default function Accueil() {
           }}
         />
 
-        {/* Titre flottant au-dessus du glass */}
+        {/* Texte */}
         <Typography
           sx={{
             position: 'absolute',

@@ -15,16 +15,25 @@ import {
 } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 
+// affiche oeuvre
 export default function Galerie() {
   const intl = useIntl();
   const [oeuvres, setOeuvres] = useState<IOeuvre[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tagSelect, setTagSelect] = useState<string>(''); // tag sélectionné
+  const [tagSelect, setTagSelect] = useState<string>('');
 
-  const { oeuvreFavoris } = useContext(FavorisContext);
+  const { oeuvreFavoris } = useContext(FavorisContext); // Récupère les favoris
 
-  const tags = ['Abstrait', 'Moderne', 'Coloré', 'Classique', 'Surréaliste'];
+  const tags = [
+    'Abstrait',
+    'Moderne',
+    'Coloré',
+    'Classique',
+    'Surréaliste',
+    'meme',
+  ];
 
+  // Récupère les oeuvres
   useEffect(() => {
     const fetchOeuvres = async () => {
       setLoading(true);
@@ -33,6 +42,7 @@ export default function Galerie() {
           'https://oeuvresapi-e8eta4csg9c2hpac.canadacentral-01.azurewebsites.net/api/oeuvres/',
         );
 
+        // verif que la liste contient un tableau d'oeuvre
         if (response.data.oeuvres && Array.isArray(response.data.oeuvres)) {
           setOeuvres(response.data.oeuvres);
         } else {
@@ -49,16 +59,18 @@ export default function Galerie() {
     fetchOeuvres();
   }, []);
 
+  // Vérifie si une oeuvre est dans les favoris
   const estDansLesFavoris = (idVerify: string | undefined) => {
     if (!idVerify) return false;
     return oeuvreFavoris.some((fav) => fav._id === idVerify);
   };
 
-  // Filtrer côté frontend
+  // Filtre les oeuvres selon le tag sélectionné
   const oeuvresFiltrees = tagSelect
     ? oeuvres.filter((o) => (o.tags ?? []).includes(tagSelect))
-    : oeuvres;
+    : oeuvres; // Si aucun tag n'est sélectionné, affiche tout
 
+  // Affiche un spinner pendant le chargement
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
@@ -78,7 +90,7 @@ export default function Galerie() {
           zIndex: 1,
         }}
       >
-        {/* Dropdown statique */}
+        {/* Menu déroulant */}
         <Box sx={{ mb: 4, width: 250 }}>
           <FormControl fullWidth>
             <InputLabel>
@@ -101,6 +113,7 @@ export default function Galerie() {
                   defaultMessage="Tous"
                 />
               </MenuItem>
+              {/* Une option pour chaque tag */}
               {tags.map((t) => (
                 <MenuItem key={t} value={t}>
                   {t}
@@ -110,6 +123,7 @@ export default function Galerie() {
           </FormControl>
         </Box>
 
+        {/* Grille Masonry pour afficher les oeuvres */}
         <Masonry
           columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
           spacing={3}
@@ -119,7 +133,7 @@ export default function Galerie() {
             <OeuvreCarte
               key={item._id}
               oeuvre={item}
-              dansfavoris={estDansLesFavoris(item._id)}
+              dansfavoris={estDansLesFavoris(item._id)} // Indique si c'est un favori
             />
           ))}
         </Masonry>

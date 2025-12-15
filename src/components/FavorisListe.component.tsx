@@ -23,11 +23,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import Iridescence from './Emprunt/Iridescence';
 
+// Composant qui affiche la liste des oeuvres favorites
 export default function FavorisListe() {
   const navigate = useNavigate();
+  // Récupère les favoris et la fonction pour les modifier depuis le contexte
   const { oeuvreFavoris, setFavorisOeuvre } = useContext(FavorisContext);
 
   const retirerDepuisListe = (id: string) => {
+    // filtre pour garder tout les fav sauf selui enlever
     const nouvelleListe = oeuvreFavoris.filter((o) => o._id !== id);
     setFavorisOeuvre(nouvelleListe);
   };
@@ -46,7 +49,6 @@ export default function FavorisListe() {
     >
       {/* Conteneur centré */}
       <Box sx={{ position: 'relative', width: 1000, maxWidth: '95%' }}>
-        {/* Iridescence autour */}
         <Box
           sx={{
             position: 'absolute',
@@ -56,6 +58,7 @@ export default function FavorisListe() {
             zIndex: 0,
           }}
         >
+          {/* Code emprunter de https://reactbits.dev/ */}
           <Iridescence />
         </Box>
 
@@ -74,6 +77,7 @@ export default function FavorisListe() {
           }}
         >
           <CardContent>
+            {/* En-tête avec icône et titre */}
             <Box sx={{ textAlign: 'center', mb: 6 }}>
               <FavoriteIcon
                 sx={{
@@ -106,6 +110,7 @@ export default function FavorisListe() {
               </Typography>
             </Box>
 
+            {/* Si la liste est vide */}
             {oeuvreFavoris.length === 0 ? (
               <Box sx={{ textAlign: 'center', py: 8 }}>
                 <Typography
@@ -117,6 +122,7 @@ export default function FavorisListe() {
                     defaultMessage="Votre liste est vide"
                   />
                 </Typography>
+                {/* Bouton pour retourner à la galerie */}
                 <Button
                   variant="contained"
                   size="large"
@@ -147,8 +153,11 @@ export default function FavorisListe() {
               </Box>
             ) : (
               <>
+                {/* Liste des favoris */}
                 <List sx={{ width: '100%', p: 0 }}>
+                  {/* Boucle sur chaque favori */}
                   {oeuvreFavoris.map((fav, index) => (
+                    // Animation de fade-in avec délai basé sur l'index
                     <Fade
                       in
                       timeout={600}
@@ -157,7 +166,7 @@ export default function FavorisListe() {
                     >
                       <ListItem
                         alignItems="center"
-                        divider={index < oeuvreFavoris.length - 1}
+                        divider={index < oeuvreFavoris.length - 1} // Ligne de séparation sauf pour le dernier
                         sx={{
                           py: 2,
                           px: 2,
@@ -172,13 +181,14 @@ export default function FavorisListe() {
                           backdropFilter: 'blur(10px)',
                         }}
                         secondaryAction={
+                          // Boutons d'action à droite
                           <Box sx={{ display: 'flex', gap: 1 }}>
-                            {/* Modifier */}
+                            {/* Bouton modifier */}
                             <IconButton
                               aria-label="modifier"
                               onClick={() =>
                                 navigate(`/modifier-oeuvre/${fav._id}`, {
-                                  state: { oeuvre: fav },
+                                  state: { oeuvre: fav }, // Passe l'oeuvre en paramètre
                                 })
                               }
                               sx={{
@@ -193,7 +203,7 @@ export default function FavorisListe() {
                               <EditIcon />
                             </IconButton>
 
-                            {/* Retirer des favoris */}
+                            {/* Bouton retirer des favoris */}
                             <IconButton
                               aria-label="retirer"
                               onClick={() => retirerDepuisListe(fav._id)}
@@ -210,6 +220,7 @@ export default function FavorisListe() {
                           </Box>
                         }
                       >
+                        {/* Avatar de l'oeuvre (image) */}
                         <ListItemAvatar>
                           <Avatar
                             variant="rounded"
@@ -224,8 +235,10 @@ export default function FavorisListe() {
                             }}
                           />
                         </ListItemAvatar>
+                        {/* Informations de l'oeuvre */}
                         <ListItemText
                           primary={
+                            // Titre de l'oeuvre
                             <Typography
                               variant="h6"
                               sx={{ fontWeight: 700, color: 'black' }}
@@ -235,6 +248,7 @@ export default function FavorisListe() {
                           }
                           secondary={
                             <Box>
+                              {/* Nom de l'artiste avec icône */}
                               <Box
                                 sx={{
                                   display: 'flex',
@@ -252,6 +266,7 @@ export default function FavorisListe() {
                                   {fav.artiste.prenom} {fav.artiste.nom}
                                 </Typography>
                               </Box>
+                              {/* Prix sous forme de chip */}
                               <Chip
                                 label={`${fav.prix.toLocaleString()} $`}
                                 size="small"
@@ -269,6 +284,7 @@ export default function FavorisListe() {
                     </Fade>
                   ))}
                 </List>
+                {/* Bouton retour en bas de la liste */}
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                   <Button
                     variant="contained"

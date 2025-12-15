@@ -23,7 +23,8 @@ function Login() {
   const navigate = useNavigate();
   const { login, isLoggedIn } = useContext(LoginContext);
 
-  // Pour empecher de faire lagger
+  // Pour empecher de refresh à chaque input
+  // Montrer par Felix Dupras-Simard
   const iridescenceBackground = useMemo(() => <Iridescence />, []);
 
   useEffect(() => {

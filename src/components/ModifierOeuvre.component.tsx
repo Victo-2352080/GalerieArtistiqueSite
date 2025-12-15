@@ -47,7 +47,8 @@ export default function ModifierOeuvre() {
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openError, setOpenError] = useState(false);
 
-  // Pour empecher de faire lagger
+  // Pour empecher de refresh à chaque input
+  // Montrer par Felix Dupras-Simard
   const iridescenceBackground = useMemo(() => <Iridescence />, []);
 
   useEffect(() => {

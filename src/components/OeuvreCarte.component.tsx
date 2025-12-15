@@ -9,18 +9,22 @@ interface ICarteProps {
   dansfavoris: boolean;
 }
 
+// Composant qui affiche une carte d'oeuvre individuelle
 export default function OeuvreCarte(props: ICarteProps) {
   const { oeuvreFavoris, setFavorisOeuvre } = useContext(FavorisContext);
 
+  // Fonction pour ajouter/retirer des favoris
   const toggleFavoris = (e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (props.dansfavoris) {
+      // Si déjà dans favoris on retire
       const nouvelleListe = oeuvreFavoris.filter(
         (item) => item._id !== props.oeuvre._id,
       );
       setFavorisOeuvre(nouvelleListe);
     } else {
+      // Sinon, on l'ajoute
       setFavorisOeuvre([...oeuvreFavoris, props.oeuvre]);
     }
   };
@@ -37,6 +41,7 @@ export default function OeuvreCarte(props: ICarteProps) {
         boxShadow: 'none',
       }}
     >
+      {/* Bouton favoris en haut à droite */}
       <IconButton
         onClick={toggleFavoris}
         sx={{
@@ -51,7 +56,7 @@ export default function OeuvreCarte(props: ICarteProps) {
         <FavoriteIcon />
       </IconButton>
 
-      {/* Image */}
+      {/* Image de l'oeuvre */}
       <CardMedia
         component="img"
         image={props.oeuvre.imageUrl}
@@ -65,6 +70,7 @@ export default function OeuvreCarte(props: ICarteProps) {
         }}
       />
 
+      {/* Tags en bas de l'image */}
       <Box
         sx={{
           position: 'absolute',
@@ -76,6 +82,7 @@ export default function OeuvreCarte(props: ICarteProps) {
           gap: 0.5,
         }}
       >
+        {/* chaque tag de l'oeuvre */}
         {props.oeuvre.tags?.map((tag, idx) => (
           <Chip
             key={idx}

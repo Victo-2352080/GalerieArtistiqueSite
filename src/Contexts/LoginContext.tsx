@@ -19,9 +19,12 @@ export default function LoginProvider(props: any) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState('');
 
-  async function login(courriel: string, motDePasse: string) {
-    return axios
-      .post(
+  const login = async (
+    courriel: string,
+    motDePasse: string,
+  ): Promise<boolean> => {
+    try {
+      const response = await axios.post(
         'https://oeuvresapi-e8eta4csg9c2hpac.canadacentral-01.azurewebsites.net/api/generatetoken',
         {
           utilisateurLogin: {
@@ -29,30 +32,19 @@ export default function LoginProvider(props: any) {
             motDePasse,
           },
         },
-      )
-      .then((response) => {
-        const { token } = response.data;
-        console.log(response.data);
-        if (token) {
-          setIsLoggedIn(true);
-          setToken(token);
-          return true;
-        } else {
-          setIsLoggedIn(false);
-          setToken('');
-          return false;
-        }
-      })
-      .catch((error) => {
-        console.error(
-          'Erreur de connexion:',
-          error.response?.data || error.message,
-        );
-        setIsLoggedIn(false);
-        setToken('');
-        throw error;
-      });
-  }
+      );
+
+      setToken(response.data.token);
+      setIsLoggedIn(true);
+      return true;
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        return false;
+      }
+      throw error;
+    }
+  };
+
   function logout() {
     setToken('');
     setIsLoggedIn(false);

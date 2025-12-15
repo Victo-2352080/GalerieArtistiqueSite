@@ -53,7 +53,10 @@ export default function Accueil() {
             transform: 'translate(-50%, -50%)',
             color: '#Fafafa',
             fontWeight: 900,
-            fontSize: '8rem',
+            fontSize: {
+              sm: '4rem',
+              lg: '8rem',
+            },
             textAlign: 'center',
           }}
         >

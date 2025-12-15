@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import {
   Box,
   Typography,
@@ -30,6 +30,9 @@ export default function AjouterOeuvre() {
   const [openError, setOpenError] = useState(false);
   const [loading, setLoading] = useState(false);
   const { token } = useContext(LoginContext);
+
+  // Pour empecher de faire lagger
+  const iridescenceBackground = useMemo(() => <Iridescence />, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,12 +112,7 @@ export default function AjouterOeuvre() {
             zIndex: 0,
           }}
         >
-          <Iridescence
-            color={[1, 1, 1]}
-            mouseReact={false}
-            amplitude={1}
-            speed={1}
-          />
+          {iridescenceBackground}
         </Box>
 
         <Card

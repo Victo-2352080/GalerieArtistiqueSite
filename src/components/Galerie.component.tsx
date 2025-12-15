@@ -21,14 +21,7 @@ export default function Galerie() {
 
   const { oeuvreFavoris } = useContext(FavorisContext);
 
-  // Tags statiques
-  const tagsStatic = [
-    'Abstrait',
-    'Moderne',
-    'Coloré',
-    'Classique',
-    'Surréaliste',
-  ];
+  const tags = ['Abstrait', 'Moderne', 'Coloré', 'Classique', 'Surréaliste'];
 
   useEffect(() => {
     const fetchOeuvres = async () => {
@@ -93,7 +86,7 @@ export default function Galerie() {
               onChange={(e) => setTagSelect(e.target.value)}
             >
               <MenuItem value="">Tous</MenuItem>
-              {tagsStatic.map((t) => (
+              {tags.map((t) => (
                 <MenuItem key={t} value={t}>
                   {t}
                 </MenuItem>

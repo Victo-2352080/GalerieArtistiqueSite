@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useMemo } from 'react';
 import { LoginContext } from '../Contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -20,6 +20,9 @@ function Login() {
 
   const navigate = useNavigate();
   const { login, isLoggedIn } = useContext(LoginContext);
+
+  // Pour empecher de faire lagger
+  const iridescenceBackground = useMemo(() => <Iridescence />, []);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -65,10 +68,8 @@ function Login() {
             zIndex: 0,
           }}
         >
-          <Iridescence />
+          {iridescenceBackground}
         </Box>
-
-        {/* GLASS CONTAINER */}
         <Box
           sx={{
             position: 'relative',
@@ -84,7 +85,6 @@ function Login() {
             border: '1px solid rgba(255,255,255,0.3)',
           }}
         >
-          {/* WELCOME */}
           <Box
             sx={{
               flex: 1,

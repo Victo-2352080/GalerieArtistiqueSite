@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -46,6 +46,9 @@ export default function ModifierOeuvre() {
   const [error, setError] = useState<string | null>(null);
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openError, setOpenError] = useState(false);
+
+  // Pour empecher de faire lagger
+  const iridescenceBackground = useMemo(() => <Iridescence />, []);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -248,12 +251,7 @@ export default function ModifierOeuvre() {
             zIndex: 0,
           }}
         >
-          <Iridescence
-            color={[1, 1, 1]}
-            mouseReact={false}
-            amplitude={1}
-            speed={1}
-          />
+          {iridescenceBackground}
         </Box>
 
         <Card

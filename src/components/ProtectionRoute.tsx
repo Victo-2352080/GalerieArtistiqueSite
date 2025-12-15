@@ -2,6 +2,8 @@ import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../Contexts/LoginContext';
 
+// Pris meme structure que LanguageContexte
+
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }

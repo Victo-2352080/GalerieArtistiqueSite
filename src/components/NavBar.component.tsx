@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 import {
   AppBar,
   Toolbar,
@@ -14,11 +15,18 @@ import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
 import { FavorisContext } from '../Contexts/favorisContext';
 import { LoginContext } from '../Contexts/LoginContext';
+import { LanguageContext } from '../Contexts/LanguageContext';
 
 export default function Navbar() {
   const { oeuvreFavoris } = useContext(FavorisContext);
   const navigate = useNavigate();
   const { isLoggedIn, logout } = useContext(LoginContext);
+  const { locale, changerLangue } = useContext(LanguageContext);
+
+  const toggleLanguage = () => {
+    const newLanguage = locale === 'fr' ? 'en' : 'fr';
+    changerLangue(newLanguage as 'fr' | 'en');
+  };
 
   return (
     <AppBar
@@ -77,12 +85,42 @@ export default function Navbar() {
               display: { xs: 'none', sm: 'block' },
             }}
           >
-            Galerie Art
+            <FormattedMessage
+              id="navbar.galerieart"
+              defaultMessage="Galerie Art"
+            />
           </Typography>
         </Box>
 
-        {/* Action Buttons */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <IconButton
+            onClick={toggleLanguage}
+            sx={{
+              bgcolor: 'rgba(255,255,255,0.9)',
+              borderRadius: 3,
+              padding: { xs: '8px 12px', sm: '10px 14px' },
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                bgcolor: 'white',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+              },
+            }}
+            title={locale === 'fr' ? 'English' : 'Francais'}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <Typography
+                sx={{
+                  fontWeight: 700,
+                  fontSize: '0.85rem',
+                  color: '#667eea',
+                }}
+              >
+                {locale.toUpperCase()}
+              </Typography>
+            </Box>
+          </IconButton>
+
           {isLoggedIn ? (
             <>
               {/* Favorites */}
@@ -131,7 +169,6 @@ export default function Navbar() {
                     boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
                   },
                 }}
-                title="Ajouter une œuvre"
               >
                 <AddIcon />
               </IconButton>
@@ -159,7 +196,10 @@ export default function Navbar() {
                   },
                 }}
               >
-                Déconnexion
+                <FormattedMessage
+                  id="navbar.deconnexion"
+                  defaultMessage="Déconnexion"
+                />
               </Button>
             </>
           ) : (
@@ -184,7 +224,10 @@ export default function Navbar() {
                 },
               }}
             >
-              Se connecter
+              <FormattedMessage
+                id="navbar.seconnecter"
+                defaultMessage="Se connecter"
+              />
             </Button>
           )}
         </Box>

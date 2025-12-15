@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import { FormattedMessage } from 'react-intl';
 import Iridescence from './Emprunt/Iridescence';
 
 export default function Accueil() {
@@ -55,7 +56,7 @@ export default function Accueil() {
             textAlign: 'center',
           }}
         >
-          BIENVENUE
+          <FormattedMessage id="accueil.bienvenue" defaultMessage="BIENVENUE" />
         </Typography>
       </Box>
     </Box>

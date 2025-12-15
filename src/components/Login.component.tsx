@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState, useMemo } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { LoginContext } from '../Contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -13,6 +14,7 @@ import { Login as LoginIcon } from '@mui/icons-material';
 import Iridescence from './Emprunt/Iridescence';
 
 function Login() {
+  const intl = useIntl();
   const [courriel, setCourriel] = useState('');
   const [motDePasse, setMotDePasse] = useState('');
   const [erreur, setErreur] = useState('');
@@ -37,9 +39,21 @@ function Login() {
 
     try {
       const reussi = await login(courriel, motDePasse);
-      if (!reussi) setErreur('Identifiants incorrects.');
+      if (!reussi) {
+        setErreur(
+          intl.formatMessage({
+            id: 'login.erreur.identifiants',
+            defaultMessage: 'Identifiants incorrects.',
+          }),
+        );
+      }
     } catch {
-      setErreur('Erreur lors de la connexion.');
+      setErreur(
+        intl.formatMessage({
+          id: 'login.erreur.connexion',
+          defaultMessage: 'Erreur lors de la connexion.',
+        }),
+      );
     } finally {
       setIsLoading(false);
     }
@@ -98,11 +112,14 @@ function Login() {
             }}
           >
             <Typography variant="h3" fontWeight={800} mb={2}>
-              Galerie Art
+              <FormattedMessage id="login.titre" defaultMessage="Galerie Art" />
             </Typography>
 
             <Typography align="center" maxWidth={400}>
-              Connectez-vous pour gérer les oeuvres de la galerie
+              <FormattedMessage
+                id="login.soustitre"
+                defaultMessage="Connectez-vous pour gérer les oeuvres de la galerie"
+              />
             </Typography>
           </Box>
 
@@ -121,7 +138,10 @@ function Login() {
               textAlign="center"
               color="black"
             >
-              Connexion
+              <FormattedMessage
+                id="login.connexion"
+                defaultMessage="Connexion"
+              />
             </Typography>
 
             <form onSubmit={handleSubmit}>
@@ -133,7 +153,10 @@ function Login() {
 
               <TextField
                 fullWidth
-                label="Courriel"
+                label={intl.formatMessage({
+                  id: 'login.courriel',
+                  defaultMessage: 'Courriel',
+                })}
                 type="email"
                 value={courriel}
                 onChange={(e) => setCourriel(e.target.value)}
@@ -144,7 +167,10 @@ function Login() {
 
               <TextField
                 fullWidth
-                label="Mot de passe"
+                label={intl.formatMessage({
+                  id: 'login.motdepasse',
+                  defaultMessage: 'Mot de passe',
+                })}
                 type="password"
                 value={motDePasse}
                 onChange={(e) => setMotDePasse(e.target.value)}
@@ -164,7 +190,10 @@ function Login() {
                 {isLoading ? (
                   <CircularProgress size={24} color="inherit" />
                 ) : (
-                  'Se connecter'
+                  <FormattedMessage
+                    id="login.bouton"
+                    defaultMessage="Se connecter"
+                  />
                 )}
               </Button>
             </form>

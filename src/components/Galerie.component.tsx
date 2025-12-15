@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import axios from 'axios';
 import OeuvreCarte from './OeuvreCarte.component';
 import type { IOeuvre } from '../models/iOeuvre.model';
@@ -15,6 +16,7 @@ import {
 import Masonry from '@mui/lab/Masonry';
 
 export default function Galerie() {
+  const intl = useIntl();
   const [oeuvres, setOeuvres] = useState<IOeuvre[]>([]);
   const [loading, setLoading] = useState(true);
   const [tagSelect, setTagSelect] = useState<string>(''); // tag sélectionné
@@ -79,13 +81,26 @@ export default function Galerie() {
         {/* Dropdown statique */}
         <Box sx={{ mb: 4, width: 250 }}>
           <FormControl fullWidth>
-            <InputLabel>Filtrer par tag</InputLabel>
+            <InputLabel>
+              <FormattedMessage
+                id="galerie.filtrer"
+                defaultMessage="Filtrer par tag"
+              />
+            </InputLabel>
             <Select
               value={tagSelect}
-              label="Filtrer par tag"
+              label={intl.formatMessage({
+                id: 'galerie.filtrer',
+                defaultMessage: 'Filtrer par tag',
+              })}
               onChange={(e) => setTagSelect(e.target.value)}
             >
-              <MenuItem value="">Tous</MenuItem>
+              <MenuItem value="">
+                <FormattedMessage
+                  id="galerie.filtrer.tous"
+                  defaultMessage="Tous"
+                />
+              </MenuItem>
               {tags.map((t) => (
                 <MenuItem key={t} value={t}>
                   {t}

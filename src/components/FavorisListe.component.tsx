@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { FormattedMessage } from 'react-intl';
 import {
   Typography,
   Button,
@@ -91,11 +92,17 @@ export default function FavorisListe() {
                   textShadow: '0 4px 20px rgba(0,0,0,0.3)',
                 }}
               >
-                Votre selection
+                <FormattedMessage
+                  id="favoris.titre"
+                  defaultMessage="Votre selection"
+                />
               </Typography>
               <Typography variant="h6" sx={{ color: 'black', fontWeight: 300 }}>
-                {oeuvreFavoris.length} oeuvre
-                {oeuvreFavoris.length > 1 ? 's' : ''} dans votre collection
+                <FormattedMessage
+                  id="favoris.soustitre"
+                  defaultMessage="{count} oeuvres dans votre collection"
+                  values={{ count: oeuvreFavoris.length }}
+                />
               </Typography>
             </Box>
 
@@ -105,7 +112,10 @@ export default function FavorisListe() {
                   variant="h5"
                   sx={{ mb: 3, color: 'black', fontWeight: 600 }}
                 >
-                  Votre liste est vide
+                  <FormattedMessage
+                    id="favoris.vide"
+                    defaultMessage="Votre liste est vide"
+                  />
                 </Typography>
                 <Button
                   variant="contained"
@@ -129,7 +139,10 @@ export default function FavorisListe() {
                   }}
                   onClick={() => navigate('/')}
                 >
-                  Aller dans la gallerie
+                  <FormattedMessage
+                    id="favoris.bouton.galerie"
+                    defaultMessage="Aller dans la gallerie"
+                  />
                 </Button>
               </Box>
             ) : (
@@ -279,7 +292,10 @@ export default function FavorisListe() {
                       transition: 'all 0.3s ease',
                     }}
                   >
-                    Retourner dans la gallerie
+                    <FormattedMessage
+                      id="favoris.bouton.retour"
+                      defaultMessage="Retourner dans la gallerie"
+                    />
                   </Button>
                 </Box>
               </>

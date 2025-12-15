@@ -3,20 +3,41 @@ import axios from 'axios';
 import OeuvreCarte from './OeuvreCarte.component';
 import type { IOeuvre } from '../models/iOeuvre.model';
 import { FavorisContext } from '../Contexts/favorisContext';
-import { Container, CircularProgress, Box } from '@mui/material';
+import {
+  Container,
+  CircularProgress,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 
 export default function Galerie() {
   const [oeuvres, setOeuvres] = useState<IOeuvre[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tagSelect, setTagSelect] = useState<string>(''); // tag sélectionné
+
   const { oeuvreFavoris } = useContext(FavorisContext);
+
+  // Tags statiques
+  const tagsStatic = [
+    'Abstrait',
+    'Moderne',
+    'Coloré',
+    'Classique',
+    'Surréaliste',
+  ];
 
   useEffect(() => {
     const fetchOeuvres = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           'https://oeuvresapi-e8eta4csg9c2hpac.canadacentral-01.azurewebsites.net/api/oeuvres/',
         );
+
         if (response.data.oeuvres && Array.isArray(response.data.oeuvres)) {
           setOeuvres(response.data.oeuvres);
         } else {
@@ -38,6 +59,11 @@ export default function Galerie() {
     return oeuvreFavoris.some((fav) => fav._id === idVerify);
   };
 
+  // Filtrer côté frontend
+  const oeuvresFiltrees = tagSelect
+    ? oeuvres.filter((o) => (o.tags ?? []).includes(tagSelect))
+    : oeuvres;
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
@@ -51,18 +77,37 @@ export default function Galerie() {
       <Container
         maxWidth="xl"
         sx={{
-          py: 6,
+          py: 4,
           position: 'relative',
           backgroundColor: '#fafafa',
           zIndex: 1,
         }}
       >
+        {/* Dropdown statique */}
+        <Box sx={{ mb: 4, width: 250 }}>
+          <FormControl fullWidth>
+            <InputLabel>Filtrer par tag</InputLabel>
+            <Select
+              value={tagSelect}
+              label="Filtrer par tag"
+              onChange={(e) => setTagSelect(e.target.value)}
+            >
+              <MenuItem value="">Tous</MenuItem>
+              {tagsStatic.map((t) => (
+                <MenuItem key={t} value={t}>
+                  {t}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
         <Masonry
           columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
           spacing={3}
           sx={{ backgroundColor: 'transparent' }}
         >
-          {oeuvres.map((item) => (
+          {oeuvresFiltrees.map((item) => (
             <OeuvreCarte
               key={item._id}
               oeuvre={item}

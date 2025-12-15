@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Box,
   Typography,
@@ -6,14 +6,15 @@ import {
   Button,
   Switch,
   FormControlLabel,
-  Container,
-  Paper,
-  Fade,
+  Card,
+  CardContent,
   Alert,
   Snackbar,
+  CircularProgress,
 } from '@mui/material';
-import axios from 'axios';
 import { Add, CheckCircle } from '@mui/icons-material';
+import { LoginContext } from '../Contexts/LoginContext';
+import Iridescence from './Emprunt/Iridescence';
 
 export default function AjouterOeuvre() {
   const [titre, setTitre] = useState('');
@@ -28,6 +29,7 @@ export default function AjouterOeuvre() {
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openError, setOpenError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { token } = useContext(LoginContext);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,18 +57,19 @@ export default function AjouterOeuvre() {
     };
 
     try {
-      const token = localStorage.getItem('authToken');
-      await axios.post(
+      await fetch(
         'https://oeuvresapi-e8eta4csg9c2hpac.canadacentral-01.azurewebsites.net/api/oeuvres/',
-        payload,
         {
+          method: 'POST',
           headers: {
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify(payload),
         },
       );
+
       setOpenSuccess(true);
-      // Reset form
       setTitre('');
       setArtisteNom('');
       setArtistePrenom('');
@@ -88,118 +91,83 @@ export default function AjouterOeuvre() {
     <Box
       sx={{
         minHeight: '100vh',
-        backgroundColor: '#fafafa',
-        py: 12,
+        bgcolor: '#fafafa',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        py: 16,
         px: 2,
       }}
     >
-      <Container maxWidth="md" sx={{ mt: 8 }}>
-        <Fade in timeout={600}>
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Add sx={{ fontSize: '3rem', color: '#667eea', mb: 2 }} />
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: 800,
-                color: '#2d3748',
-                mb: 2,
-              }}
-            >
-              Ajouter une Œuvre
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                color: '#718096',
-                fontWeight: 300,
-              }}
-            >
-              Partagez une nouvelle création avec notre galerie
-            </Typography>
-          </Box>
-        </Fade>
+      <Box sx={{ position: 'relative', width: 1000, maxWidth: '95%' }}>
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: -10,
+            borderRadius: 4,
+            overflow: 'hidden',
+            zIndex: 0,
+          }}
+        >
+          <Iridescence
+            color={[1, 1, 1]}
+            mouseReact={false}
+            amplitude={1}
+            speed={1}
+          />
+        </Box>
 
-        <Fade in timeout={800}>
-          <Paper
-            elevation={8}
-            sx={{
-              p: 5,
-              borderRadius: 4,
-              backgroundColor: 'white',
-              border: '1px solid rgba(0,0,0,0.06)',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-            }}
-          >
+        <Card
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            borderRadius: 4,
+            overflow: 'hidden',
+            backgroundColor: 'rgba(255, 255, 255, 0.75)',
+            backdropFilter: 'blur(18px)',
+            WebkitBackdropFilter: 'blur(18px)',
+            border: '1px solid rgba(255, 255, 255, 0.5)',
+          }}
+        >
+          <CardContent>
+            <Box sx={{ textAlign: 'center', mb: 6 }}>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 800,
+                  color: 'black',
+                  mb: 1,
+                  textShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                }}
+              >
+                Ajouter une oeuvre
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'black', fontWeight: 300 }}>
+                Partagez votre création
+              </Typography>
+            </Box>
+
             <Box
               component="form"
               onSubmit={handleSubmit}
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 3,
-              }}
+              sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
             >
-              {/* Title */}
               <TextField
-                label="Titre de l'œuvre"
+                label="Titre de l'oeuvre"
                 value={titre}
                 onChange={(e) => setTitre(e.target.value)}
                 required
                 fullWidth
-                variant="outlined"
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    '&:hover fieldset': {
-                      borderColor: '#667eea',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#667eea',
-                    },
+                    borderRadius: 2,
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                    '&:hover fieldset': { borderColor: '#667eea' },
+                    '&.Mui-focused fieldset': { borderColor: '#667eea' },
                   },
                 }}
               />
 
-              {/* Artist Info */}
-              <Box>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ fontWeight: 600, mb: 2, color: '#2d3748' }}
-                >
-                  Informations sur l'artiste
-                </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      gap: 2,
-                      flexDirection: { xs: 'column', sm: 'row' },
-                    }}
-                  >
-                    <TextField
-                      label="Prénom"
-                      value={artistePrenom}
-                      onChange={(e) => setArtistePrenom(e.target.value)}
-                      required
-                      fullWidth
-                    />
-                    <TextField
-                      label="Nom"
-                      value={artisteNom}
-                      onChange={(e) => setArtisteNom(e.target.value)}
-                      required
-                      fullWidth
-                    />
-                  </Box>
-                  <TextField
-                    label="Surnom (optionnel)"
-                    value={artisteSurnom}
-                    onChange={(e) => setArtisteSurnom(e.target.value)}
-                    fullWidth
-                  />
-                </Box>
-              </Box>
-
-              {/* Price and Date */}
               <Box
                 sx={{
                   display: 'flex',
@@ -208,91 +176,148 @@ export default function AjouterOeuvre() {
                 }}
               >
                 <TextField
-                  label="Prix (€)"
+                  label="Prénom de l'artiste"
+                  value={artistePrenom}
+                  onChange={(e) => setArtistePrenom(e.target.value)}
+                  required
+                  fullWidth
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      backgroundColor: 'rgba(33, 33, 33, 0.1)',
+                    },
+                  }}
+                />
+                <TextField
+                  label="Nom de l'artiste"
+                  value={artisteNom}
+                  onChange={(e) => setArtisteNom(e.target.value)}
+                  required
+                  fullWidth
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      backgroundColor: 'rgba(33, 33, 33, 0.1)',
+                    },
+                  }}
+                />
+              </Box>
+
+              <TextField
+                label="Surnom (optionnel)"
+                value={artisteSurnom}
+                onChange={(e) => setArtisteSurnom(e.target.value)}
+                fullWidth
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    backgroundColor: 'rgba(33, 33, 33, 0.1)',
+                  },
+                }}
+              />
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 2,
+                  flexDirection: { xs: 'column', sm: 'row' },
+                }}
+              >
+                <TextField
+                  label="Prix ($)"
                   type="number"
                   value={prix}
                   onChange={(e) => setPrix(Number(e.target.value))}
                   required
                   fullWidth
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      backgroundColor: 'rgba(33, 33, 33, 0.1)',
+                    },
+                  }}
                 />
                 <TextField
-                  label="Date de création"
                   type="date"
                   value={dateCreation}
                   onChange={(e) => setDateCreation(e.target.value)}
                   required
                   fullWidth
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      backgroundColor: 'rgba(33, 33, 33, 0.1)',
+                    },
+                  }}
                 />
               </Box>
 
-              {/* Tags */}
               <TextField
                 label="Tags"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
-                fullWidth
-                helperText="Séparez les tags par des virgules (ex: abstrait, moderne, coloré)"
+                placeholder="abstrait, moderne, coloré"
+                helperText="Séparez les tags par des virgules"
                 multiline
                 rows={2}
+                fullWidth
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    backgroundColor: 'rgba(33, 33, 33, 0.1)',
+                  },
+                }}
               />
 
-              {/* Image URL */}
               <TextField
                 label="URL de l'image"
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
                 required
                 fullWidth
-                helperText="Entrez l'URL complète de l'image de l'œuvre"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    backgroundColor: 'rgba(33, 33, 33, 0.1)',
+                  },
+                }}
               />
 
-              {/* Featured Switch */}
               <FormControlLabel
                 control={
                   <Switch
                     checked={enVedette}
                     onChange={(e) => setEnVedette(e.target.checked)}
-                    sx={{
-                      '& .MuiSwitch-switchBase.Mui-checked': {
-                        color: '#667eea',
-                      },
-                      '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track':
-                        {
-                          backgroundColor: '#667eea',
-                        },
-                    }}
                   />
                 }
-                label={
-                  <Box>
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      Mettre en vedette
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      Cette œuvre sera mise en avant dans la galerie
-                    </Typography>
-                  </Box>
-                }
+                label="Mettre en vedette"
               />
 
-              {/* Submit Button */}
               <Button
                 type="submit"
                 variant="contained"
                 size="large"
                 disabled={loading}
-                startIcon={<Add />}
+                startIcon={
+                  loading ? (
+                    <CircularProgress size={20} color="inherit" />
+                  ) : (
+                    <Add />
+                  )
+                }
                 sx={{
                   mt: 2,
                   bgcolor: '#667eea',
                   py: 1.5,
-                  borderRadius: 3,
+                  borderRadius: 2,
                   fontWeight: 600,
-                  fontSize: '1.1rem',
+                  fontSize: '1rem',
+                  textTransform: 'none',
+                  boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
                   '&:hover': {
                     bgcolor: '#5568d3',
                     transform: 'translateY(-2px)',
-                    boxShadow: '0 8px 20px rgba(102, 126, 234, 0.4)',
+                    boxShadow: '0 6px 20px rgba(102,126,234,0.4)',
                   },
                   transition: 'all 0.3s ease',
                 }}
@@ -300,42 +325,40 @@ export default function AjouterOeuvre() {
                 {loading ? 'Ajout en cours...' : "Ajouter l'œuvre"}
               </Button>
             </Box>
-          </Paper>
-        </Fade>
+          </CardContent>
+        </Card>
+      </Box>
 
-        {/* Success Snackbar */}
-        <Snackbar
-          open={openSuccess}
-          autoHideDuration={4000}
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={4000}
+        onClose={() => setOpenSuccess(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
           onClose={() => setOpenSuccess(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          severity="success"
+          icon={<CheckCircle />}
+          sx={{ width: '100%', borderRadius: 2 }}
         >
-          <Alert
-            onClose={() => setOpenSuccess(false)}
-            severity="success"
-            icon={<CheckCircle />}
-            sx={{ width: '100%' }}
-          >
-            Œuvre ajoutée avec succès à la galerie !
-          </Alert>
-        </Snackbar>
+          Œuvre ajoutée avec succès !
+        </Alert>
+      </Snackbar>
 
-        {/* Error Snackbar */}
-        <Snackbar
-          open={openError}
-          autoHideDuration={4000}
+      <Snackbar
+        open={openError}
+        autoHideDuration={4000}
+        onClose={() => setOpenError(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
           onClose={() => setOpenError(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          severity="error"
+          sx={{ width: '100%', borderRadius: 2 }}
         >
-          <Alert
-            onClose={() => setOpenError(false)}
-            severity="error"
-            sx={{ width: '100%' }}
-          >
-            Erreur lors de l'ajout de l'œuvre. Veuillez réessayer.
-          </Alert>
-        </Snackbar>
-      </Container>
+          Erreur lors de l'ajout. Veuillez réessayer.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

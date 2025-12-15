@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Iridescence from './Emprunt/Iridescence';
 
 export default function Accueil() {
@@ -12,22 +12,51 @@ export default function Accueil() {
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
+        backgroundColor: '#fafafa',
       }}
     >
       <Box
         sx={{
           width: '60vw',
           height: '35vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-          boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+          position: 'relative',
+          borderRadius: 4,
+          overflow: 'hidden',
         }}
       >
+        {/* Iridescence en fond */}
         <Iridescence
-          color={[1, 1, 1]}
+          color={[0.8, 0.8, 0.8]}
           mouseReact={false}
           amplitude={0.7}
           speed={0.3}
         />
+
+        {/* Glass blanc semi-transparent */}
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 15,
+            backgroundColor: 'rgba(255, 255, 255, 0.01)',
+            backdropFilter: 'blur(10px)',
+          }}
+        />
+
+        {/* Titre flottant au-dessus du glass */}
+        <Typography
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            color: '#Fafafa',
+            fontWeight: 900,
+            fontSize: '8rem',
+            textAlign: 'center',
+          }}
+        >
+          BIENVENUE
+        </Typography>
       </Box>
     </Box>
   );

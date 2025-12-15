@@ -22,7 +22,7 @@ export default function LoginProvider(props: any) {
   async function login(courriel: string, motDePasse: string) {
     return axios
       .post(
-        'https://vinylesapi-bke0b0evdcdqdwb2.canadacentral-01.azurewebsites.net/api/generatetoken',
+        'https://oeuvresapi-e8eta4csg9c2hpac.canadacentral-01.azurewebsites.net/api/generatetoken',
         {
           utilisateurLogin: {
             courriel,

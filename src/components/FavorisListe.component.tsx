@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import {
-  Container,
   Typography,
   Button,
-  Paper,
+  Card,
+  CardContent,
   List,
   ListItem,
   ListItemAvatar,
@@ -14,11 +14,13 @@ import {
   Fade,
   Chip,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { FavorisContext } from '../Contexts/favorisContext';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useNavigate } from 'react-router-dom';
-import { ArrowBack, ShoppingCart } from '@mui/icons-material';
+import { ArrowBack, Person } from '@mui/icons-material';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import Iridescence from './Emprunt/Iridescence';
 
 export default function FavorisListe() {
   const navigate = useNavigate();
@@ -29,117 +31,109 @@ export default function FavorisListe() {
     setFavorisOeuvre(nouvelleListe);
   };
 
-  const totalPrix = oeuvreFavoris.reduce((sum, oeuvre) => sum + oeuvre.prix, 0);
-
   return (
     <Box
       sx={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        py: 12,
+        bgcolor: '#fafafa',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        py: 18,
         px: 2,
       }}
     >
-      <Container
-        maxWidth="md"
-        sx={{
-          mt: 8,
-        }}
-      >
-        <Fade in timeout={600}>
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 2,
-                mb: 2,
-              }}
-            >
-              <FavoriteIcon sx={{ color: '#ff4081', fontSize: '3rem' }} />
+      {/* Conteneur centré */}
+      <Box sx={{ position: 'relative', width: 1000, maxWidth: '95%' }}>
+        {/* Iridescence autour */}
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: -6,
+            borderRadius: 4,
+            overflow: 'hidden',
+            zIndex: 0,
+          }}
+        >
+          <Iridescence />
+        </Box>
+
+        {/* Carte principale */}
+        <Card
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            borderRadius: 4,
+            overflow: 'hidden',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.25)',
+            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            border: '1px solid rgba(255, 255, 255, 0.5)',
+          }}
+        >
+          <CardContent>
+            <Box sx={{ textAlign: 'center', mb: 6 }}>
+              <FavoriteIcon
+                sx={{
+                  fontSize: '4rem',
+                  color: '#ff4081',
+                  mb: 2,
+                  textShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                }}
+              />
               <Typography
                 variant="h3"
                 sx={{
                   fontWeight: 800,
-                  color: 'white',
-                  textShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                  color: 'black',
+                  mb: 1,
+                  textShadow: '0 4px 20px rgba(0,0,0,0.3)',
                 }}
               >
-                Vos Coups de Cœur
+                Votre selection
               </Typography>
-              <FavoriteIcon sx={{ color: '#ff4081', fontSize: '3rem' }} />
+              <Typography variant="h6" sx={{ color: 'black', fontWeight: 300 }}>
+                {oeuvreFavoris.length} oeuvre
+                {oeuvreFavoris.length > 1 ? 's' : ''} dans votre collection
+              </Typography>
             </Box>
-            <Typography
-              variant="h6"
-              sx={{
-                color: 'rgba(255, 255, 255, 0.9)',
-                fontWeight: 300,
-              }}
-            >
-              {oeuvreFavoris.length} œuvre{oeuvreFavoris.length > 1 ? 's' : ''}{' '}
-              dans votre collection
-            </Typography>
-          </Box>
-        </Fade>
 
-        {oeuvreFavoris.length === 0 ? (
-          <Fade in timeout={800}>
-            <Paper
-              elevation={8}
-              sx={{
-                p: 6,
-                borderRadius: 4,
-                textAlign: 'center',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                backdropFilter: 'blur(10px)',
-              }}
-            >
-              <FavoriteIcon
-                sx={{ fontSize: '5rem', color: '#e0e0e0', mb: 2 }}
-              />
-              <Typography variant="h5" color="text.secondary" sx={{ mb: 3 }}>
-                Votre liste est vide
-              </Typography>
-              <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-                Commencez à ajouter vos œuvres préférées pour créer votre
-                collection personnelle
-              </Typography>
-              <Button
-                variant="contained"
-                size="large"
-                startIcon={<ArrowBack />}
-                sx={{
-                  bgcolor: '#667eea',
-                  px: 4,
-                  py: 1.5,
-                  borderRadius: 3,
-                  fontWeight: 600,
-                  '&:hover': {
-                    bgcolor: '#5568d3',
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 8px 20px rgba(102, 126, 234, 0.4)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-                onClick={() => navigate('/')}
-              >
-                Découvrir les œuvres
-              </Button>
-            </Paper>
-          </Fade>
-        ) : (
-          <>
-            <Fade in timeout={800}>
-              <Paper
-                elevation={8}
-                sx={{
-                  borderRadius: 4,
-                  overflow: 'hidden',
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  backdropFilter: 'blur(10px)',
-                }}
-              >
+            {oeuvreFavoris.length === 0 ? (
+              <Box sx={{ textAlign: 'center', py: 8 }}>
+                <Typography
+                  variant="h5"
+                  sx={{ mb: 3, color: 'black', fontWeight: 600 }}
+                >
+                  Votre liste est vide
+                </Typography>
+                <Button
+                  variant="contained"
+                  size="large"
+                  startIcon={<ArrowBack />}
+                  sx={{
+                    bgcolor: '#667eea',
+                    px: 4,
+                    py: 1.5,
+                    borderRadius: 2,
+                    fontWeight: 600,
+                    fontSize: '1rem',
+                    textTransform: 'none',
+                    boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+                    '&:hover': {
+                      bgcolor: '#5568d3',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 6px 20px rgba(102, 126, 234, 0.4)',
+                    },
+                    transition: 'all 0.3s ease',
+                  }}
+                  onClick={() => navigate('/')}
+                >
+                  Aller dans la gallerie
+                </Button>
+              </Box>
+            ) : (
+              <>
                 <List sx={{ width: '100%', p: 0 }}>
                   {oeuvreFavoris.map((fav, index) => (
                     <Fade
@@ -152,29 +146,55 @@ export default function FavorisListe() {
                         alignItems="center"
                         divider={index < oeuvreFavoris.length - 1}
                         sx={{
-                          py: 3,
-                          px: 3,
+                          py: 2,
+                          px: 2,
                           transition: 'all 0.3s ease',
+                          borderRadius: 2,
+                          color: 'black',
+                          mb: 1,
                           '&:hover': {
-                            backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                            backgroundColor: 'rgba(255,255,255,0.1)',
                           },
+                          backgroundColor: 'rgba(255,255,255,0.15)',
+                          backdropFilter: 'blur(10px)',
                         }}
                         secondaryAction={
-                          <IconButton
-                            edge="end"
-                            aria-label="delete"
-                            onClick={() => retirerDepuisListe(fav._id)}
-                            sx={{
-                              color: '#ff4081',
-                              '&:hover': {
-                                backgroundColor: 'rgba(255, 64, 129, 0.1)',
-                                transform: 'scale(1.1)',
-                              },
-                              transition: 'all 0.3s ease',
-                            }}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
+                          <Box sx={{ display: 'flex', gap: 1 }}>
+                            {/* Modifier */}
+                            <IconButton
+                              aria-label="modifier"
+                              onClick={() =>
+                                navigate(`/modifier-oeuvre/${fav._id}`, {
+                                  state: { oeuvre: fav },
+                                })
+                              }
+                              sx={{
+                                color: '#667eea',
+                                '&:hover': {
+                                  transform: 'scale(1.1)',
+                                  color: '#5568d3',
+                                },
+                                transition: 'all 0.3s ease',
+                              }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+
+                            {/* Retirer des favoris */}
+                            <IconButton
+                              aria-label="retirer"
+                              onClick={() => retirerDepuisListe(fav._id)}
+                              sx={{
+                                color: '#ff4081',
+                                '&:hover': {
+                                  transform: 'scale(1.1)',
+                                },
+                                transition: 'all 0.3s ease',
+                              }}
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          </Box>
                         }
                       >
                         <ListItemAvatar>
@@ -186,8 +206,8 @@ export default function FavorisListe() {
                               width: 100,
                               height: 100,
                               mr: 3,
-                              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                               borderRadius: 2,
+                              border: '2px solid rgba(102, 126, 234, 0.2)',
                             }}
                           />
                         </ListItemAvatar>
@@ -195,29 +215,38 @@ export default function FavorisListe() {
                           primary={
                             <Typography
                               variant="h6"
-                              sx={{ fontWeight: 600, mb: 0.5 }}
+                              sx={{ fontWeight: 700, color: 'black' }}
                             >
                               {fav.titre}
                             </Typography>
                           }
                           secondary={
                             <Box>
-                              <Typography
-                                component="span"
-                                variant="body1"
-                                color="text.primary"
-                                sx={{ display: 'block', mb: 1 }}
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 1,
+                                  mb: 1,
+                                }}
                               >
-                                {fav.artiste.prenom} {fav.artiste.nom}
-                              </Typography>
+                                <Person
+                                  sx={{ fontSize: '1.1rem', color: 'black' }}
+                                />
+                                <Typography
+                                  sx={{ color: 'black', fontWeight: 500 }}
+                                >
+                                  {fav.artiste.prenom} {fav.artiste.nom}
+                                </Typography>
+                              </Box>
                               <Chip
-                                icon={<ShoppingCart />}
-                                label={`${fav.prix.toLocaleString()} €`}
+                                label={`${fav.prix.toLocaleString()} $`}
                                 size="small"
                                 sx={{
-                                  backgroundColor: '#667eea',
+                                  backgroundColor: '#333333',
                                   color: 'white',
-                                  fontWeight: 600,
+                                  fontWeight: 700,
+                                  fontSize: '0.85rem',
                                 }}
                               />
                             </Box>
@@ -227,70 +256,37 @@ export default function FavorisListe() {
                     </Fade>
                   ))}
                 </List>
-
-                {/* Total Section */}
-                <Box
-                  sx={{
-                    p: 3,
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    borderTop: '2px solid rgba(102, 126, 234, 0.2)',
-                  }}
-                >
-                  <Box
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    startIcon={<ArrowBack />}
+                    onClick={() => navigate('/')}
                     sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
+                      bgcolor: '#667eea',
+                      px: 4,
+                      py: 1.5,
+                      borderRadius: 2,
+                      fontWeight: 600,
+                      fontSize: '1rem',
+                      textTransform: 'none',
+                      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+                      '&:hover': {
+                        bgcolor: '#5568d3',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 6px 20px rgba(102, 126, 234, 0.4)',
+                      },
+                      transition: 'all 0.3s ease',
                     }}
                   >
-                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                      Valeur totale
-                    </Typography>
-                    <Typography
-                      variant="h5"
-                      sx={{ fontWeight: 700, color: '#667eea' }}
-                    >
-                      {totalPrix.toLocaleString()} €
-                    </Typography>
-                  </Box>
+                    Retourner dans la gallerie
+                  </Button>
                 </Box>
-              </Paper>
-            </Fade>
-
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: 2,
-                mt: 4,
-              }}
-            >
-              <Button
-                variant="contained"
-                size="large"
-                startIcon={<ArrowBack />}
-                onClick={() => navigate('/')}
-                sx={{
-                  bgcolor: 'rgba(255, 255, 255, 0.95)',
-                  color: '#667eea',
-                  px: 4,
-                  py: 1.5,
-                  borderRadius: 3,
-                  fontWeight: 600,
-                  '&:hover': {
-                    bgcolor: 'white',
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 8px 20px rgba(255, 255, 255, 0.3)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                Continuer à explorer
-              </Button>
-            </Box>
-          </>
-        )}
-      </Container>
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </Box>
     </Box>
   );
 }

@@ -1,3 +1,7 @@
+{
+  /* Code revu par ClaudeAI pour réparer les erreurs de Build*/
+}
+
 import { useContext, useMemo, useState } from 'react';
 import {
   Box,
@@ -342,7 +346,7 @@ export default function AjouterOeuvre() {
                   transition: 'all 0.3s ease',
                 }}
               >
-                {loading ? 'Ajout en cours...' : "Ajouter l'Œuvre"}
+                {loading ? 'Ajout en cours...' : "Ajouter l'oeuvre"}
               </Button>
             </Box>
           </CardContent>

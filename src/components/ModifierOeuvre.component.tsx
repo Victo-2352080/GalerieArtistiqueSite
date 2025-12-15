@@ -1,3 +1,6 @@
+{
+  /* Code revu par ClaudeAI pour réparer les erreurs de Build*/
+}
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';

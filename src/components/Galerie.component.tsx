@@ -24,14 +24,7 @@ export default function Galerie() {
 
   const { oeuvreFavoris } = useContext(FavorisContext); // Récupère les favoris
 
-  const tags = [
-    'Abstrait',
-    'Moderne',
-    'Coloré',
-    'Classique',
-    'Surréaliste',
-    'meme',
-  ];
+  const tags = ['Abstrait', 'Art', 'Populaire', 'Extra', 'Educatif', 'Meme'];
 
   // Récupère les oeuvres
   useEffect(() => {

@@ -1,0 +1,159 @@
+openapi: 3.0.0
+info:
+  title: API Oeuvres
+  description: Documentation de l'API pour l'application de Gallerie D'art
+  version: '1.0.0'
+
+servers:
+  - url: https://oeuvresapi-e8eta4csg9c2hpac.canadacentral-01.azurewebsites.net
+
+tags:
+  - name: Token
+    description: Gestion des jetons
+  - name: Utilisateurs
+    description: Gestion des utilisateurs
+  - name: Oeuvres
+    description: Gestion des œuvres
+
+paths:
+  /generatetoken/:
+    post:
+      tags:
+        - Token
+      summary: Génère un jeton JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Jeton généré avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /utilisateurs/:
+    get:
+      tags:
+        - Utilisateurs
+      summary: Récupère tous les utilisateurs
+      responses:
+        '200':
+          description: Liste des utilisateurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /oeuvres/:
+    get:
+      tags:
+        - Oeuvres
+      summary: Récupère toutes les œuvres
+      responses:
+        '200':
+          description: Liste des œuvres
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+    post:
+      tags:
+        - Oeuvres
+      summary: Ajoute une nouvelle œuvre
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Œuvre créée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /oeuvres/{id}:
+    get:
+      tags:
+        - Oeuvres
+      summary: Récupère une œuvre par ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Détails de l’œuvre
+          content:
+            application/json:
+              schema:
+                type: object
+    put:
+      tags:
+        - Oeuvres
+      summary: Met à jour une œuvre par ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Œuvre mise à jour
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      tags:
+        - Oeuvres
+      summary: Supprime une œuvre par ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Œuvre supprimée avec succès
+
+  /oeuvres/tag/{tag}:
+    get:
+      tags:
+        - Oeuvres
+      summary: Récupère les œuvres par tag
+      parameters:
+        - name: tag
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste des œuvres avec ce tag
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
